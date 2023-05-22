@@ -7,24 +7,21 @@ if(location.search && location.search.startsWith("?search") && location.search.s
   document.getElementById("search-input").value = location.search.split("=")[1];
 }
 fetchProducts(queryParam);
-  console.log(location.search);
+  // console.log(location.search);
 }
 
 function inputHandler(e){
 let queryParam = 'https://dummyjson.com/products/search?q=' + e.target.value;
 fetchProducts(queryParam);``
 }
-// changing from function expression to declaration
+/* changing from function expression to declaration first with ajax
 function fetchProducts  (queryParam){
     const prdouctDiv = document.getElementById("products")
 
     let req = new XMLHttpRequest();
     
     req.onreadystatechange = function(){
-         /**
-          this keyword won't work if this is an arrow funcion😉
-          * 
-          */
+         
         if(this.readyState===4){
             // console.log(this)
             let res = JSON.parse(this.responseText)
@@ -44,9 +41,7 @@ function fetchProducts  (queryParam){
                     <h4>${product.brand}</h4>
                     <p>${product.description}</p>
                   </div>
-
                 `
-                
             }
         }
         // else {
@@ -56,6 +51,34 @@ function fetchProducts  (queryParam){
     req.open("GET", queryParam, true);
     req.send();
     // console.log(window.location);
+
+}
+*/
+
+//switching to fetch
+function fetchProducts(queryParam){
+    const prdouctDiv = document.getElementById("products");
+
+fetch(queryParam).then(res=>res.json()).then(res=>{
+
+          prdouctDiv.innerHTML = "";
+            for (let i = 0; i < res.products.length; i++) {
+                const product = res.products[i];
+                prdouctDiv.innerHTML +=`
+                <div class="product_card">
+                    <div class="product_card-img">
+                      <img
+                        src="${product.thumbnail}"
+                        alt="${product.title}"
+                      />
+                    </div>
+                    <h3>${product.title}</h3>
+                    <h4>${product.brand}</h4>
+                    <p>${product.description}</p>
+                  </div>
+                `
+            }
+})
 
 }
  // this piece of code can't be before function expression 😎

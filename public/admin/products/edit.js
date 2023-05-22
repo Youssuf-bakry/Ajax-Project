@@ -5,26 +5,30 @@ window.onload = function (){
     fetchCurrent(id);
 }
 
+
+
 function fetchCurrent (productId){
     if (!productId) return;
-    const http = new XMLHttpRequest();
     const url ='https://dummyjson.com/products/' + productId;
+    fetch(url).then(res=>res.json()).then(res=>{
+        document.getElementById("name").value =res.title;
+    })
+//     const http = new XMLHttpRequest();
 
-    http.open("GET",url,true);
+//     http.open("GET",url,true);
 
-http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-        const res = JSON.parse(http.responseText)
-            console.log(res);
-    document.getElementById("name").value =res.title;
+// http.onreadystatechange = function() {//Call a function when the state changes.
+//         if(http.readyState == 4 && http.status == 200) {
+//         const res = JSON.parse(http.responseText)
+//             console.log(res);
+//     document.getElementById("name").value =res.title;
 
-    }else{
-        console.log(this)
-    }
+//     }else{
+//         console.log(this)
+//     }
     
 }
-http.send();
-}
+// http.send();
 
 function handleEditProduct(e){
     e.preventDefault();
@@ -34,21 +38,18 @@ function handleEditProduct(e){
     const id = location.search.slice(1).split("&")[0].split("=")[1];
     if(!id) return alert("id is empty!");
 
-    const http = new XMLHttpRequest();
-    const url = 'https://dummyjson.com/products/'+id;
-    const body = {
-        title:title.value 
+    const url = 'https://dummyjson.com/products/'+ id;
+
+    fetch(url, {
+        method: 'PUT', /* or PATCH */
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            title: title.value
+        })
+        })
+        .then(res => res.json())
+        .then(res=>console.log(res));
+    
     } 
-    http.open('PUT', url, true);
 
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-        alert(http.responseText);
-    }
-}
-http.send(JSON.stringify(body));
-
-}
+    

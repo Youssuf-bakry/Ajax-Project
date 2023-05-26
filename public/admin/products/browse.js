@@ -48,11 +48,9 @@ window.onload = function(){
 }
 */
 function fetchProducts(){
-    const tbody = document.getElementById("table-body")
+    const tbody = document.getElementById("table-body");
 
-    fetch('https://dummyjson.com/products')
-    .then(res => res.json())
-    .then(res=>{
+    fetch('https://dummyjson.com/products').then(res => res.json()).then(res=> {
 
         tbody.innerHTML = "";
         for (let i = 0; i < res.products.length; i++) {
